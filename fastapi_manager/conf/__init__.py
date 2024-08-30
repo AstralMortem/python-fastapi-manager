@@ -1,10 +1,10 @@
 import dynaconf
 from pathlib import Path
-import global_settings
+from fastapi_manager.conf import global_settings
 import os
 
 GLOBAL_SETTINGS_PATH = Path(global_settings.__file__).absolute()
-SETTINGS_ENV = "FATAPI_SETTINGS"
+SETTINGS_ENV = "FASTAPI_SETTINGS"
 
 # add parsers to convert string to pathlib in configs
 dynaconf.utils.parse_conf.converters["@path"] = lambda x: Path(x).absolute()
