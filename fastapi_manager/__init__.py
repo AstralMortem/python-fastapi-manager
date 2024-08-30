@@ -1,3 +1,4 @@
 def setup():
+    #TODO 1) Populate apps
 
-    print("Setup function")
+    ...
