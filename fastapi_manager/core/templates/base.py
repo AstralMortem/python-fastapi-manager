@@ -1,7 +1,5 @@
 import json
-from mailbox import NotEmptyError
 from pathlib import Path
-from tabnanny import check
 from typing import Union, Optional, List
 
 from pydantic.v1 import PathNotExistsError
@@ -24,17 +22,21 @@ class File:
 
     def set_content(self, new_content):
         self._content = new_content
+        return self
 
     def append_content(self, new_content):
         self._content += new_content
+        return self
 
     def extend_replacer(self, replacer: dict[str, str]):
         self.replacer.update(replacer)
+        return self
 
     def set_replacer(self, replacer: dict):
         self.replacer = replacer
+        return self
 
-    def format(self):
+    def format_content(self):
         if self.replacer:
             for placeholder, val in self.replacer.items():
                 if placeholder in self.content:
@@ -48,7 +50,7 @@ class File:
         path = Path(parent_path).joinpath(self._name)
         return {
             "name": self._name,
-            "content": self._content,
+            "content": self.format_content(),
             "path": str(path),
         }
 
@@ -61,6 +63,10 @@ class Folder(list):
     @property
     def name(self):
         return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
 
     def append(self, item: Union[File, "Folder"]):
         if not isinstance(item, (File, Folder)):
@@ -95,51 +101,13 @@ class Folder(list):
     def to_json(self):
         return json.dumps(self.to_dict(), indent=2)
 
-# class Generator:
-#
-#     @staticmethod
-#     def create_file(file:dict, current_path: Union[str, Path]):
-#         new_path = Path(current_path).joinpath(file["name"]).absolute()
-#         with open(new_path, "w", encoding="utf8") as f:
-#             f.write(file.get("content", ""))
-#             f.close()
-#
-#     @staticmethod
-#     def create_folder(folder:dict, current_path: Union[str, Path]):
-#         new_path = Path(current_path).joinpath(folder["name"]).absolute()
-#         if folder.get("create") and new_path.exists():
-#             raise ValueError(f"Folder with name '{folder.get('name')}' already exists")
-#         if not folder.get("create") and not new_path.exists():
-#             raise ValueError(f"Folder with name '{folder.get('name')}' does not exist")
-#         new_path.mkdir(exist_ok=folder.get("create"))
-#         return new_path
-#
-#     @classmethod
-#     def _walk_structure(cls, structure: dict, current_path: Union[str, Path]):
-#         # Ensure the current directory exists
-#         current_path = cls.create_folder(structure, current_path)
-#
-#
-#         # Iterate over the contents of the current folder
-#         for item in structure.get("contents", []):
-#             if "contents" in item:
-#                 # It's a folder
-#                 new_path = cls.create_folder(item, current_path)
-#                 cls._walk_structure(item, new_path)
-#             else:
-#                 # It's a file
-#                 cls.create_file(item, current_path)
-#
-#     @classmethod
-#     def write_structure(cls, structure: Union[dict, str], root_dir: Union[str, Path]):
-#         if isinstance(structure, str):
-#             structure = json.loads(structure)
-#         cls._walk_structure(structure, root_dir)
-
 class PathNotExistsError(Exception):
     pass
 
 class PathNotEmptyError(Exception):
+    pass
+
+class PathAlreadyExistsError(Exception):
     pass
 
 class Generator:
@@ -163,7 +131,8 @@ class Generator:
         else:
             # if base_path none, create root folder from struct path
             path = Path(structure["path"]).resolve()
-
+            if path.exists():
+                raise PathAlreadyExistsError(f"{path} already exists.")
 
         Generator._walk_structure(structure, path)
 
