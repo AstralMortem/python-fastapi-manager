@@ -34,7 +34,7 @@ def test_file_format(dummy_file):
 
     dummy_file.set_content(test_content)
     dummy_file.set_replacer({"{{app_name}}": "TestApp"})
-    new_content = dummy_file.format()
+    new_content = dummy_file.format_content()
     assert new_content == test_content.replace("{{app_name}}", "TestApp")
 
 
