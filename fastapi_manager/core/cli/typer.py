@@ -1,6 +1,7 @@
 import typer
 import inspect
 from .commands.base import BaseCommand
+from fastapi_manager import setup
 
 def get_all_command():
     from fastapi_manager.core.cli import commands
@@ -18,6 +19,8 @@ for command in get_all_command():
         callback=command.execute
     )
     cli.registered_commands.append(handler)
+else:
+    setup()
 
 
 

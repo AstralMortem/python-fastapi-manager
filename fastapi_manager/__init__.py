@@ -1,4 +1,4 @@
 def setup():
-    #TODO 1) Populate apps
 
-    ...
+    from fastapi_manager.conf import settings
+    print("SETUP APP")

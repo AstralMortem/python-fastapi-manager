@@ -13,6 +13,7 @@ def get_project_folder(project_name):
     subfolder.append(File("__init__.py"))
 
     root.append(subfolder)
+    root.append(Folder("apps"))
     return root
 
 
