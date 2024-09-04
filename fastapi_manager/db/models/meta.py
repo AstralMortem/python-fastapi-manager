@@ -516,6 +516,11 @@ class ModelMeta(type):
         meta.model_name = convert_to_snake_case(name)
         meta.app = app_label
 
+        table = getattr(meta, "db_table", None)
+        # set table name if not exists
+        if table is None or table == "":
+            meta.db_table = f"{app_label}_{meta.model_name}"
+
         # tortoise init
         meta.fields_map = fields_map
         meta.fields_db_projection = fields_db_projection
