@@ -1,1 +1,3 @@
 DEBUG = False
+
+INSTALLED_APPS = []

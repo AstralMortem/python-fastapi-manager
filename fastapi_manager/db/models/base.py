@@ -1,1 +1,0 @@
-from tortoise.models import Model, MetaInfo, ModelMeta

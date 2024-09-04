@@ -8,12 +8,12 @@ MODELS_MODULE_NAME = "models"
 APPS_MODULE_NAME = "config"
 
 
-
 class AppCreator:
     def __init__(self):
         self.app_module: ModuleType = None
         self.app_config: type[AppConfig] = None
         self.app_name: str = None
+
     def try_get_module(self):
         try:
             self.app_module = import_module(self.app_entry)
@@ -58,7 +58,6 @@ class AppCreator:
                 )
             )
 
-
     def create(self, app_entry):
         self.app_entry = app_entry
         self.try_get_module()
@@ -66,13 +65,15 @@ class AppCreator:
         self.try_import_as_string()
 
         if self.app_module is None and self.app_config is None:
-            raise Exception("Error importing or configuring app '%s'. " "Is it installed?" % self.app_entry)
+            raise Exception(
+                "Error importing or configuring app '%s'. "
+                "Is it installed?" % self.app_entry
+            )
 
         self.try_set_appconfig_name()
 
         self.try_import_module_by_config_name()
         return self.app_config(self.app_name, self.app_module)
-
 
     @staticmethod
     def get_unique_module_path(module):
@@ -100,9 +101,6 @@ class AppCreator:
         return paths[0]
 
 
-
-
-
 class AppConfig:
     def __init__(self, app_name: str, app_module: ModuleType):
         # full doted path
@@ -114,7 +112,9 @@ class AppConfig:
         # unique app label
         self.label = app_name.rpartition(".")[2]
         if not self.label.isidentifier():
-            raise Exception(f"The app label '{self.label}' is not a valid Python identifier.")
+            raise Exception(
+                f"The app label '{self.label}' is not a valid Python identifier."
+            )
 
         # models module
         # module where stored all models for current app
@@ -127,7 +127,6 @@ class AppConfig:
         self.app_registry = None
 
         self.path = AppCreator.get_unique_module_path(app_module)
-
 
     async def on_ready(self):
         """
@@ -145,3 +144,9 @@ class AppConfig:
             models_module_name = f"{self.name}.{MODELS_MODULE_NAME}"
             self.models_module = import_module(models_module_name)
 
+    def __str__(self):
+        return "<%s: %s> in (%s)" % (
+            self.__class__.__name__,
+            self.label,
+            Path(self.__module__.rpartition(".")[2]).absolute(),
+        )
