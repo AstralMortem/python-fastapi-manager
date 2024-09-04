@@ -116,23 +116,27 @@ class Generator:
     def is_empty(path: Path):
         return len(list(path.iterdir())) == 0
 
+
+
     @staticmethod
-    def generate_structure(struct: str, base_path: Union[str, Path, None] = None):
+    def generate_structure(struct: str, base_path: Union[str, Path, None] = None, create_root = False):
         structure = json.loads(struct)
 
-
-        if base_path is not None:
-            # check if path exists and empty
-            path = Path(base_path).resolve()
-            if not path.exists():
-                raise PathNotExistsError(f"{base_path} does not exist.")
-            if not Generator.is_empty(path):
-                raise PathNotEmptyError(f"{base_path} is not empty")
-        else:
-            # if base_path none, create root folder from struct path
+        if base_path is None:
             path = Path(structure["path"]).resolve()
             if path.exists():
                 raise PathAlreadyExistsError(f"{path} already exists.")
+        else:
+            path = Path(base_path).resolve()
+            if create_root:
+                path = path.joinpath(structure["path"]).resolve()
+                if path.exists():
+                    raise PathAlreadyExistsError(f"{path} already exists.")
+            else:
+                if not path.exists():
+                    raise PathNotExistsError(f"{base_path} does not exist.")
+                if not Generator.is_empty(path):
+                    raise PathNotEmptyError(f"{base_path} is not empty")
 
         Generator._walk_structure(structure, path)
 
@@ -150,18 +154,4 @@ class Generator:
                     f.write(item.get("content", ""))
                     f.close()
 
-
-if __name__ == '__main__':
-    project = "test_project"
-    root = Folder(project)
-    subfolder = Folder(project)
-    subfolder.extend([
-        File("settings.toml"),
-        File("__init__.py"),
-        File("main_router.py"),
-        File("asgi.py"),
-    ])
-    root.extend([File("manage.py"), subfolder])
-    print(root.to_json())
-    Generator.generate_structure(root.to_json())
 

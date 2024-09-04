@@ -4,5 +4,5 @@ class BaseCommand:
         self.name = name
 
     @classmethod
-    def execute(cls):
+    def execute(cls, *args, **kwargs):
         raise NotImplementedError
