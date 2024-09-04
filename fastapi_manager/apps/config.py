@@ -144,6 +144,28 @@ class AppConfig:
             models_module_name = f"{self.name}.{MODELS_MODULE_NAME}"
             self.models_module = import_module(models_module_name)
 
+    def get_model(self, model_name, require_ready=True):
+        if require_ready:
+            self.app_registry.check_models_ready()
+        else:
+            self.app_registry.check_apps_ready()
+        try:
+            return self.models[model_name.lower()]
+        except KeyError:
+            raise LookupError(
+                "App '%s' doesn't have a '%s' model." % (self.label, model_name)
+            )
+
+    def get_models(self, include_auto_created=False, include_swapped=False):
+        self.app_registry.check_models_ready()
+        for model in self.models.values():
+            # TODO: remove django args
+            # if model._meta.auto_created and not include_auto_created:
+            #     continue
+            # if model._meta.swapped and not include_swapped:
+            #     continue
+            yield model
+
     def __str__(self):
         return "<%s: %s> in (%s)" % (
             self.__class__.__name__,
