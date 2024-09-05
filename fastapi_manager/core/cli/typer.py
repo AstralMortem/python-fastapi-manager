@@ -18,5 +18,6 @@ for command in get_all_command():
     handler = typer.models.CommandInfo(name=command.name, callback=command.execute)
     cli.registered_commands.append(handler)
 else:
+    # TODO: await setup for cli execution
     # setup()
     pass

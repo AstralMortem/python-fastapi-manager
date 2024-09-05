@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-
 from fastapi_manager import setup
+from fastapi_manager.conf import settings
+from fastapi_manager.db import register_orm
 
 
 @asynccontextmanager
@@ -9,7 +10,7 @@ async def global_lifespan(app: "Application"):
     # run global startup event
     print("Setup server")
     await setup()
-
+    register_orm(app, settings)
     # check if user set custom lifespan
     # else just yield
     if app.user_lifespan is not None:

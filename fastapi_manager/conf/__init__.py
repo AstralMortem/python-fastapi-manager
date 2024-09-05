@@ -11,15 +11,20 @@ GLOBAL_SETTINGS_PATH = Path(global_settings.__file__).absolute()
 SETTINGS_ENV = "FASTAPI_SETTINGS"
 
 
-def resolve_toml(path: str):
+def init_settings(path: str):
     if path is not None:
         if path.endswith(".toml"):
             path = path.split(".toml")[0]
 
         module_path, settings_path = path.rsplit(".", 1)
         module_directory = module_dir(import_module(module_path))
+        module_directory = Path(module_directory).resolve()
 
-        return Path(module_directory).joinpath(settings_path + ".toml").resolve()
+        os.environ.setdefault(
+            "FASTAPI_BASE_DIR", "@path " + str(module_directory.parent.absolute())
+        )
+
+        return module_directory.joinpath(settings_path + ".toml").resolve()
 
 
 # add parsers to convert string to pathlib in configs
@@ -30,7 +35,7 @@ settings = dynaconf.Dynaconf(
     load_dotenv=True,
     settings_files=[
         str(GLOBAL_SETTINGS_PATH),
-        str(resolve_toml(os.environ.get(SETTINGS_ENV))),
+        str(init_settings(os.environ.get(SETTINGS_ENV))),
     ],
     merge_enabled=True,
     envvar_prefix="FASTAPI",

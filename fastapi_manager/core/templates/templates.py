@@ -26,7 +26,7 @@ def get_app_folder(app_name, **kwargs):
     root.append(
         File("config.py", APP_CONFIG_CONTENT).set_replacer(
             {
-                "camel_case_app_name": convert_to_camel_case(app_name),
+                "camel_case_app_name": convert_to_camel_case(app_name, True),
                 "app_name": app_name,
             }
         )

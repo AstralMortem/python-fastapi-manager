@@ -1,12 +1,8 @@
 MANAGE_PY_CONTENT = """#!/usr/bin/env python
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
 import os
 
 def main():
     os.environ.setdefault("FASTAPI_SETTINGS", "{{project_name}}.settings")
-    os.environ.setdefault("FASTAPI_BASE_DIR", str(BASE_DIR))
     try:
         from fastapi_manager.core.cli import cli
     except ImportError as exc:
@@ -24,13 +20,10 @@ ASGI_CONTENT = """# ASGI config for {{project_name}} project.
 # It exposes the ASGI callable as a module-level variable named application
 
 import os
-from pathlib import Path
-from fastapi_manager.core.asgi import Application
-
 os.environ.setdefault("FASTAPI_SETTINGS", "{{project_name}}.settings")
-BASE_DIR = Path(__file__).resolve().parent
-os.environ.setdefault("FASTAPI_BASE_DIR", str(BASE_DIR))
 
+
+from fastapi_manager.core.asgi import Application
 application = Application()
 
 """

@@ -9,4 +9,19 @@ PROJECT_VERSION = "1.0.0"
 # as /api/v1, in routes we set /test. see more https://fastapi.tiangolo.com/advanced/behind-a-proxy/
 PROJECT_ROOT_PATH = ""
 
+# applications to populate in registry
 INSTALLED_APPS = []
+
+# database dict
+DATABASES = {
+    "default": {
+        "engine": "tortoise.backends.asyncpg",
+        "credentials": {
+            "host": "localhost",
+            "port": "5432",
+            "user": "postgres",
+            "password": "postgres",
+            "database": "test",
+        },
+    },
+}
