@@ -11,7 +11,6 @@ class File:
         self._content = content
         self.replacer = {}
 
-
     @property
     def name(self):
         return self._name
@@ -28,12 +27,17 @@ class File:
         self._content += new_content
         return self
 
-    def extend_replacer(self, replacer: dict[str, str]):
-        self.replacer.update(replacer)
+    def extend_replacer(self, key, value):
+        self.replacer.update({key: value})
         return self
 
-    def set_replacer(self, replacer: dict):
-        self.replacer = replacer
+    def set_replacer(self, replacer: dict[str, str]):
+        for key, value in replacer.items():
+            if key.startswith("{{") and key.endswith("}}"):
+                self.replacer[key] = value
+            else:
+                self.replacer["{{" + key + "}}"] = value
+
         return self
 
     def format_content(self):
@@ -46,7 +50,7 @@ class File:
     def __str__(self) -> str:
         return f"  |-> {self._name}"
 
-    def to_dict(self, parent_path: Union[str,Path] = "") -> dict:
+    def to_dict(self, parent_path: Union[str, Path] = "") -> dict:
         path = Path(parent_path).joinpath(self._name)
         return {
             "name": self._name,
@@ -71,10 +75,18 @@ class Folder(list):
     def append(self, item: Union[File, "Folder"]):
         if not isinstance(item, (File, Folder)):
             raise TypeError("Only File or Folder objects can be added")
-        if isinstance(item, File) and any(f.name == item.name for f in self if isinstance(f, File)):
-            raise ValueError(f"File with name '{item.name}' already exists in folder '{self._name}'.")
-        if isinstance(item, Folder) and any(f.name == item.name for f in self if isinstance(f, Folder)):
-            raise ValueError(f"Folder with name '{item.name}' already exists in folder '{self._name}'.")
+        if isinstance(item, File) and any(
+            f.name == item.name for f in self if isinstance(f, File)
+        ):
+            raise ValueError(
+                f"File with name '{item.name}' already exists in folder '{self._name}'."
+            )
+        if isinstance(item, Folder) and any(
+            f.name == item.name for f in self if isinstance(f, Folder)
+        ):
+            raise ValueError(
+                f"Folder with name '{item.name}' already exists in folder '{self._name}'."
+            )
         super().append(item)
 
     def extend(self, items: list[Union[File, "Folder"]]):
@@ -85,12 +97,16 @@ class Folder(list):
         indent = " " * (level * 2)
         result = f"{indent}|-> {self._name}\n"
         for item in self:
-            result += f"{indent}{item}\n" if isinstance(item, File) else item.__str__(level + 1)
+            result += (
+                f"{indent}{item}\n"
+                if isinstance(item, File)
+                else item.__str__(level + 1)
+            )
         return result
 
-    def to_dict(self, parent_path: Union[str,Path] = "") -> dict:
+    def to_dict(self, parent_path: Union[str, Path] = "") -> dict:
         path = Path(parent_path).joinpath(self._name)
-        result = {"name": self._name, "path": str(path), "contents": []  }
+        result = {"name": self._name, "path": str(path), "contents": []}
         for item in self:
             if isinstance(item, File):
                 result["contents"].append(item.to_dict(path))
@@ -101,14 +117,18 @@ class Folder(list):
     def to_json(self):
         return json.dumps(self.to_dict(), indent=2)
 
+
 class PathNotExistsError(Exception):
     pass
+
 
 class PathNotEmptyError(Exception):
     pass
 
+
 class PathAlreadyExistsError(Exception):
     pass
+
 
 class Generator:
 
@@ -116,10 +136,10 @@ class Generator:
     def is_empty(path: Path):
         return len(list(path.iterdir())) == 0
 
-
-
     @staticmethod
-    def generate_structure(struct: str, base_path: Union[str, Path, None] = None, create_root = False):
+    def generate_structure(
+        struct: str, base_path: Union[str, Path, None] = None, create_root=False
+    ):
         structure = json.loads(struct)
 
         if base_path is None:
@@ -153,5 +173,3 @@ class Generator:
                 with open(file_path, "w") as f:
                     f.write(item.get("content", ""))
                     f.close()
-
-

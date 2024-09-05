@@ -1,12 +1,11 @@
-MANAGE_PY_CONTENT = """
-#!/usr/bin/env python
+MANAGE_PY_CONTENT = """#!/usr/bin/env python
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 import os
 
 def main():
-    os.environ.setdefault("FASTAPI_SETTINGS", "./{{project_name}}/settings.toml")
+    os.environ.setdefault("FASTAPI_SETTINGS", "{{project_name}}.settings")
     os.environ.setdefault("FASTAPI_BASE_DIR", str(BASE_DIR))
     try:
         from fastapi_manager.core.cli import cli
@@ -20,3 +19,29 @@ if __name__ == '__main__':
 """
 
 MODELS_CONTENT = "from fastapi_manager.db import models, fields"
+
+ASGI_CONTENT = """# ASGI config for {{project_name}} project.
+# It exposes the ASGI callable as a module-level variable named application
+
+import os
+from pathlib import Path
+from fastapi_manager.core.asgi import Application
+
+os.environ.setdefault("FASTAPI_SETTINGS", "{{project_name}}.settings")
+BASE_DIR = Path(__file__).resolve().parent
+os.environ.setdefault("FASTAPI_BASE_DIR", str(BASE_DIR))
+
+application = Application()
+
+"""
+
+SETTINGS_TOML_CONTENT = """[default]
+DEBUG = true
+INSTALLED_APPS = []
+"""
+
+APP_CONFIG_CONTENT = """from fastapi_manager.apps import AppConfig
+
+class {{camel_case_app_name}}Config(AppConfig):
+    name = "{{app_name}}"
+"""

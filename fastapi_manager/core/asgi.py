@@ -1,8 +1,6 @@
 from contextlib import asynccontextmanager
-from ctypes import windll
-
 from fastapi import FastAPI
-from fastapi_manager.conf import settings
+
 from fastapi_manager import setup
 
 
@@ -27,8 +25,9 @@ async def global_lifespan(app: "Application"):
 class Application(FastAPI):
 
     def __init__(self, lifespan=None, *args, **kwargs) -> None:
-        self.user_lifespan = lifespan
+        from fastapi_manager.conf import settings
 
+        self.user_lifespan = lifespan
         super().__init__(
             lifespan=global_lifespan,
             title=settings.PROJECT_TITLE,
