@@ -1,3 +1,5 @@
+import asyncio
+
 import typer
 import inspect
 from .commands.base import BaseCommand
@@ -15,9 +17,10 @@ def get_all_command():
 cli = typer.Typer()
 
 for command in get_all_command():
-    handler = typer.models.CommandInfo(name=command.name, callback=command.execute)
+    current_command = command(command.name)
+    handler = typer.models.CommandInfo(
+        name=command.name, callback=current_command.execute
+    )
     cli.registered_commands.append(handler)
 else:
-    # TODO: await setup for cli execution
-    # setup()
-    pass
+    asyncio.run(setup())

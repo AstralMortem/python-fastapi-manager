@@ -8,4 +8,4 @@ class FastapiMigrations(models.Model):
     applied = fields.DatetimeField(auto_now_add=True)
 
     class Meta:
-        db_table = "fastapi_migrations"
+        db_table = "migrations"

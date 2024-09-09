@@ -2,10 +2,14 @@ import inspect
 from types import ModuleType
 from pathlib import Path
 from importlib import import_module
+
+from starlette.routing import Router
+
 from fastapi_manager.utils.module_loading import import_string, module_has_submodule
 
 MODELS_MODULE_NAME = "models"
 APPS_MODULE_NAME = "config"
+ROUTER_MODULE_NAME = "router"
 
 
 class AppCreator:
@@ -165,6 +169,14 @@ class AppConfig:
             # if model._meta.swapped and not include_swapped:
             #     continue
             yield model
+
+    def get_router(self, endpoint_var):
+        if module_has_submodule(self.module, ROUTER_MODULE_NAME):
+            mod = import_module(f"{self.name}.{ROUTER_MODULE_NAME}")
+            for name, obj in inspect.getmembers(mod):
+                if name == endpoint_var:
+                    return obj
+        return []
 
     def __str__(self):
         return "<%s: %s> in (%s)" % (

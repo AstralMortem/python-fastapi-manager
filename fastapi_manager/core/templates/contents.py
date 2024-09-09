@@ -31,6 +31,7 @@ application = Application()
 SETTINGS_TOML_CONTENT = """[default]
 DEBUG = true
 INSTALLED_APPS = []
+ROOT_ROUTER = "{{project_name}}.router"
 """
 
 APP_CONFIG_CONTENT = """from fastapi_manager.apps import AppConfig
@@ -38,3 +39,7 @@ APP_CONFIG_CONTENT = """from fastapi_manager.apps import AppConfig
 class {{camel_case_app_name}}Config(AppConfig):
     name = "{{app_name}}"
 """
+
+ROUTER_CONTENT = """from fastapi_manager.router import path
+
+ENDPOINTS = []"""

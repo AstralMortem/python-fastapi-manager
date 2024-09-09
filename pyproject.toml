@@ -13,6 +13,8 @@ dynaconf = "^3.2.6"
 tortoise-orm = "^0.21.6"
 typer = "^0.12.5"
 uvicorn = "^0.30.6"
+aerich = "^0.7.2"
+asyncpg = "^0.29.0"
 
 
 [tool.poetry.group.test.dependencies]

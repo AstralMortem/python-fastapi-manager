@@ -1,2 +1,5 @@
 from .template_creation import CreateProject, CreateApp
-__all__ = ['CreateProject',  'CreateApp']
+
+# from .migrations import MakeMigrations, Migrate
+
+__all__ = ["CreateProject", "CreateApp", "MakeMigrations", "Migrate"]

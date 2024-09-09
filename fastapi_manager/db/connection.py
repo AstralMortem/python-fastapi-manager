@@ -4,11 +4,15 @@ from importlib.util import find_spec
 
 
 def register_orm(app, settings):
-    config = {
+    config = generate_config(settings)
+    register_tortoise(app=app, config=config)
+
+
+def generate_config(settings):
+    return {
         "connections": validate_connections(settings.DATABASES),
         "apps": generate_apps_dict(),
     }
-    register_tortoise(app=app, config=config)
 
 
 def validate_connections(db_connections: dict[str, Any]):
@@ -44,6 +48,12 @@ def generate_apps_dict():
 
     for app_config in apps.get_app_configs():
         apps_dict[app_config.label] = {
-            "models": [app_config.models_module.__name__],
+            "models": [f"{app_config.name}.models"],
+            "default_connection": "default",
         }
+
+    apps_dict["fastapi"] = {
+        "models": ["aerich.models"],
+        "default_connection": "default",
+    }
     return apps_dict
