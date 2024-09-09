@@ -15,6 +15,7 @@ typer = "^0.12.5"
 uvicorn = "^0.30.6"
 aerich = "^0.7.2"
 asyncpg = "^0.29.0"
+fastapi-class = "^3.6.0"
 
 
 [tool.poetry.group.test.dependencies]

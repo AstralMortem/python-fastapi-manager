@@ -205,6 +205,20 @@ all = ["email-validator (>=2.0.0)", "fastapi-cli[standard] (>=0.0.5)", "httpx (>
 standard = ["email-validator (>=2.0.0)", "fastapi-cli[standard] (>=0.0.5)", "httpx (>=0.23.0)", "jinja2 (>=2.11.2)", "python-multipart (>=0.0.7)", "uvicorn[standard] (>=0.12.0)"]
 
 [[package]]
+name = "fastapi-class"
+version = "3.6.0"
+description = "Simplifies class-based views for more organized and maintainable code in FastAPI."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "fastapi_class-3.6.0-py3-none-any.whl", hash = "sha256:7349376e9c88534ca8a4b8bec5d9af57e2985d0552595b955536ced904d8a6cc"},
+    {file = "fastapi_class-3.6.0.tar.gz", hash = "sha256:4e6e1f949b67a88958f1a30088d4359bd816ee338df89e898877346cb7a49a22"},
+]
+
+[package.dependencies]
+fastapi = ">=0.100.0,<0.120.0"
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -649,4 +663,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "4df3831b40dc0e312441612f165027a9d8e3e453d2e5a1ec03b83319657c890e"
+content-hash = "f92908291dbeb49844495a05951e5cc47dd46ac4082bc73fdeaa332543cf4653"
