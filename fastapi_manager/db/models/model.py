@@ -15,7 +15,7 @@ from typing import (
     Type,
     Union,
 )
-
+from uuid import UUID
 
 from pypika.terms import Term
 from typing_extensions import Self
@@ -48,6 +48,8 @@ from tortoise.transactions import in_transaction
 
 
 from .meta import ModelMeta, MetaInfo, MODEL, EMPTY
+
+PK = Union[int, str, UUID]
 
 
 class Model(metaclass=ModelMeta):

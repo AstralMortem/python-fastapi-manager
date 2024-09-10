@@ -11,7 +11,9 @@ from typing import (
     Type,
     TypeVar,
     TYPE_CHECKING,
+    Union,
 )
+from uuid import UUID
 
 from pypika import Order, Query, Table
 from tortoise.models import (

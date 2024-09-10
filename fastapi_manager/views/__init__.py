@@ -1,20 +1,10 @@
 from .views import (
     APIView,
-    RetrieveAPIView,
+    CreateAPIView,
+    UpdateAPIView,
     RetrieveUpdateAPIView,
-    RetrieveDestroyAPIView,
     RetrieveUpdateDestroyAPIView,
     ModelView,
+    ListAPIView,
+    DestroyAPIView,
 )
-
-from fastapi_class.routers import endpoint
-
-__all__ = [
-    "APIView",
-    "RetrieveAPIView",
-    "RetrieveUpdateAPIView",
-    "RetrieveDestroyAPIView",
-    "RetrieveUpdateDestroyAPIView",
-    "endpoint",
-    "ModelView",
-]
