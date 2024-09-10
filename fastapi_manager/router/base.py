@@ -4,7 +4,10 @@ from fastapi_manager.conf import settings
 
 
 class BaseRouter(APIRouter):
-    pass
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        return cls(**initkwargs)
 
 
 async def resolve_endpoints(app: FastAPI):

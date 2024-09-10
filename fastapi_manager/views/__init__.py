@@ -1,10 +1,4 @@
-from .views import (
-    APIView,
-    CreateAPIView,
-    UpdateAPIView,
-    RetrieveUpdateAPIView,
-    RetrieveUpdateDestroyAPIView,
-    ModelView,
-    ListAPIView,
-    DestroyAPIView,
-)
+from .views import APIView
+from .generics import GenericAPIView
+
+__all__ = ["APIView", "GenericAPIView"]
