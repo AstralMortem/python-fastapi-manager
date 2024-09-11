@@ -20,6 +20,7 @@ class GenericAPIView(APIView):
     lookup_field: str = "pk"
     name_parser: Callable[[object, str], str] = _view_class_name_default_parser
 
+    # TODO: change to detect Path() annotation also
     def get_paths(self, func):
         fields = []
         sig = inspect.signature(func)

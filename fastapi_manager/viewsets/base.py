@@ -75,6 +75,7 @@ def endpoint(
             """
             return await function(*args, **kwargs)
 
+        # TODO: add Path() prefix if in arg of callable func
         _wrapper.__endpoint_metadata = Metadata(  # type: ignore
             methods=methods,
             name=name,
@@ -114,7 +115,6 @@ class ViewSetMixin(BaseRouter):
                     handler, "__endpoint_metadata"
                 ):
                     method = actions.get(_callable_name, "")
-                    print(method)
                     metadata: Metadata = getattr(
                         handler,
                         "__endpoint_metadata",

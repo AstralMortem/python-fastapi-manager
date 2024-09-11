@@ -34,15 +34,6 @@ def include(path: str):
 def register_view_set(viewset, **initkwargs):
     from fastapi_manager.viewsets.base import MAPPINGS
 
-    # mappings = {
-    #     "get": "retrieve",
-    #     "get": "list",
-    #     "post": "create",
-    #     "delete": "destroy",
-    #     "patch": "update",
-    #     "put": "update",
-    # }
-
     allowed_methods = {
         k: v for k, v in MAPPINGS.items() if v.upper() in viewset.allowed_methods
     }
