@@ -502,8 +502,9 @@ class ModelMeta(type):
         # fastapi_manager init
 
         app_label = None
-        app_config = apps.get_containing_app_config(module)
+
         if getattr(meta, "app", None) is None and parents:
+            app_config = apps.get_containing_app_config(module)
             if app_config is None:
                 if not getattr(meta, "abstract"):
                     raise RuntimeError(
@@ -514,9 +515,9 @@ class ModelMeta(type):
             else:
                 app_label = app_config.label
 
+        meta.app = app_label
         meta.apps = apps
         meta.model_name = convert_to_snake_case(name)
-        meta.app = app_label
 
         table = getattr(meta, "db_table", None)
         # set table name if not exists

@@ -1,3 +1,5 @@
+# -------------- SERVER CONTENT --------------------------------
+
 MANAGE_PY_CONTENT = """#!/usr/bin/env python
 import os
 
@@ -13,8 +15,6 @@ def main():
 if __name__ == '__main__':
     main()
 """
-
-MODELS_CONTENT = "from fastapi_manager.db import models, fields"
 
 ASGI_CONTENT = """# ASGI config for {{project_name}} project.
 # It exposes the ASGI callable as a module-level variable named application
@@ -34,6 +34,10 @@ INSTALLED_APPS = []
 ROOT_ROUTER = "{{project_name}}.router"
 """
 
+# -------------- APP CONTENT --------------------------------
+
+MODELS_CONTENT = "from fastapi_manager.db import models, fields"
+
 APP_CONFIG_CONTENT = """from fastapi_manager.apps import AppConfig
 
 class {{camel_case_app_name}}Config(AppConfig):
@@ -43,3 +47,9 @@ class {{camel_case_app_name}}Config(AppConfig):
 ROUTER_CONTENT = """from fastapi_manager.router import path
 
 ENDPOINTS = []"""
+
+SERVICES_CONTENT = """from fastapi_manager.services import BaseService
+
+"""
+
+VIEWS_CONTENT = """form fastapi_manager.viewsets import ModelViewSet"""

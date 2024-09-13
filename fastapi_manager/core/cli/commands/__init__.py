@@ -1,7 +1,7 @@
 from .template_creation import CreateProject, CreateApp
 from .run_server import RunServerCommand
 
-# from .migrations import MakeMigrations, Migrate
+# from .migrations import MakeMigrations
 
 __all__ = [
     "CreateProject",

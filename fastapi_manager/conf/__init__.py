@@ -23,7 +23,6 @@ def init_settings(path: str):
         os.environ.setdefault(
             "FASTAPI_BASE_DIR", "@path " + str(module_directory.parent.absolute())
         )
-
         return module_directory.joinpath(settings_path + ".toml").resolve()
 
 

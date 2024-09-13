@@ -25,3 +25,6 @@ DATABASES = {
         },
     },
 }
+
+
+TIMEZONE = "UTC"

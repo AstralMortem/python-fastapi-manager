@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from importlib import import_module
 from fastapi import APIRouter, FastAPI
 from fastapi_manager.conf import settings
@@ -10,6 +11,7 @@ class BaseRouter(APIRouter):
         return cls(**initkwargs)
 
 
+@asynccontextmanager
 async def resolve_endpoints(app: FastAPI):
     from .conf import ENDPOINTS_VAR
 
@@ -23,3 +25,5 @@ async def resolve_endpoints(app: FastAPI):
 
     for endpoint in endpoints:
         app.include_router(endpoint)
+
+    yield

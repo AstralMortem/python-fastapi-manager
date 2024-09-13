@@ -16,8 +16,8 @@ def get_app_folder(app_name, **kwargs):
     root.append(File("__init__.py"))
     root.append(File("models.py", MODELS_CONTENT))
     root.append(File("router.py", ROUTER_CONTENT))
-    root.append(File("_views.py"))
-    root.append(File("services.py"))
+    root.append(File("views.py", VIEWS_CONTENT))
+    root.append(File("services.py", SERVICES_CONTENT))
 
     return root
 

@@ -84,6 +84,9 @@ class AppRegistry:
         except KeyError:
             raise LookupError(f"No installed app with label '{app_label}'.")
 
+    def to_dict(self):
+        return {app.label: app.models for app in self.get_app_configs()}
+
     def register_model(self, app_label, model):
         # Since this method is called when models are imported, it cannot
         # perform imports because of the risk of import loops. It mustn't
