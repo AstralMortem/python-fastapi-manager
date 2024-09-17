@@ -140,6 +140,10 @@ class AppConfig:
 
     @classmethod
     def create(cls, app_entry: str):
+        """
+        Create or Init AppConfig for installed app
+        """
+
         return AppCreator().create(app_entry)
 
     def import_models(self):
@@ -149,18 +153,24 @@ class AppConfig:
             self.models_module = import_module(models_module_name)
 
     def get_model(self, model_name, require_ready=True):
+        """
+        Get model by it`s name
+        """
         if require_ready:
             self.app_registry.check_models_ready()
         else:
             self.app_registry.check_apps_ready()
         try:
-            return self.models[model_name.lower()]
+            return self.models[model_name]
         except KeyError:
             raise LookupError(
                 "App '%s' doesn't have a '%s' model." % (self.label, model_name)
             )
 
     def get_models(self, include_auto_created=False, include_swapped=False):
+        """
+        Return Iterator of models of current app
+        """
         self.app_registry.check_models_ready()
         for model in self.models.values():
             # TODO: remove django args

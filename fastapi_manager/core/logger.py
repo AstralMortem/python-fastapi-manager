@@ -7,7 +7,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from datetime import datetime
 from fastapi_manager.conf import settings
 
-PROJECT_NAME = settings.BASE_DIR.name
+try:
+    PROJECT_NAME = settings.BASE_DIR
+except:
+    PROJECT_NAME = "fastapi_manager"
 
 # Logger Configuration
 logging.basicConfig(

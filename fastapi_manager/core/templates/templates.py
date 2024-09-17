@@ -46,3 +46,5 @@ def get_project_folder(project_name, **kwargs):
     subfolder.extend([settings_toml, router_py, asgi_py, File("__init__.py")])
 
     root.append(subfolder)
+
+    return root
