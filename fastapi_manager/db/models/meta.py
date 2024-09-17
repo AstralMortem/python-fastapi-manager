@@ -69,6 +69,7 @@ class MetaInfo:
         "schema",
         "app",
         "model_name",
+        "model_label",
         "apps",
         "fields",
         "db_fields",
@@ -111,6 +112,7 @@ class MetaInfo:
         self.schema: Optional[str] = getattr(meta, "schema", None)
         self.app: Optional[str] = getattr(meta, "app", None)
         self.model_name: Optional[str] = getattr(meta, "model_name", None)
+        self.model_label: Optional[str] = getattr(meta, "model_label", None)
         self.apps: Optional[object] = getattr(meta, "apps", None)
         self.unique_together: Tuple[Tuple[str, ...], ...] = get_together(
             meta, "unique_together"
@@ -517,12 +519,13 @@ class ModelMeta(type):
 
         meta.app = app_label
         meta.apps = apps
-        meta.model_name = convert_to_snake_case(name)
+        meta.model_name = name
+        meta.model_label = convert_to_snake_case(name)
 
         table = getattr(meta, "db_table", None)
         # set table name if not exists
         if table is None or table == "":
-            meta.db_table = f"{app_label}_{meta.model_name}"
+            meta.db_table = f"{app_label}_{meta.model_label}"
 
         # tortoise init
         meta.fields_map = fields_map
