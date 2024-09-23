@@ -2,8 +2,6 @@ import json
 from pathlib import Path
 from typing import Union, Optional, List
 
-from pydantic.v1 import PathNotExistsError
-
 
 class File:
     def __init__(self, name: str, content: str = ""):

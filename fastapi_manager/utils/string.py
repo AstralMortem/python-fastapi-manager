@@ -12,12 +12,12 @@ def convert_to_camel_case(string: str, is_upper: bool = False):
 
 
 def is_camel_case(string: str):
-    CAMEL_CASE_TEST_RE = re.compile(
+    camel_case_test_re = re.compile(
         r"^[a-zA-Z]*([a-z]+[A-Z]+|[A-Z]+[a-z]+)[a-zA-Z\d]*$"
     )
-    return CAMEL_CASE_TEST_RE.match(string) is not None
+    return camel_case_test_re.match(string) is not None
 
 
 def is_snake_case(string: str):
-    SNAKE_CASE_TEST_RE = re.compile(r"^([a-z]+\d*_[a-z\d_]*|_+[a-z\d]+[a-z\d_]*)$")
-    return SNAKE_CASE_TEST_RE.match(string) is not None
+    snake_case_test_re = re.compile(r"^([a-z]+\d*_[a-z\d_]*|_+[a-z\d]+[a-z\d_]*)$")
+    return snake_case_test_re.match(string) is not None

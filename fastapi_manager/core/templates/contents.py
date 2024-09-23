@@ -52,4 +52,4 @@ SERVICES_CONTENT = """from fastapi_manager.services import BaseService
 
 """
 
-VIEWS_CONTENT = """form fastapi_manager.viewsets import ModelViewSet"""
+VIEWS_CONTENT = """from fastapi_manager.viewsets import ModelViewSet"""

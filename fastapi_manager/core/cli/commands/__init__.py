@@ -1,12 +1,7 @@
-from .template_creation import CreateProject, CreateApp
-from .run_server import RunServerCommand
+from .run_server import cli as server_typer
+from .template_creation import cli as file_typer
 
-# from .migrations import MakeMigrations
+# list of commands typer instances
+COMMANDS = [server_typer, file_typer]
 
-__all__ = [
-    "CreateProject",
-    "CreateApp",
-    "MakeMigrations",
-    "Migrate",
-    "RunServerCommand",
-]
+__all__ = ["COMMANDS"]

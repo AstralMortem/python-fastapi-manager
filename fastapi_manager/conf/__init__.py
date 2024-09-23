@@ -1,5 +1,3 @@
-from typing import Union
-
 import dynaconf
 from pathlib import Path
 from fastapi_manager.conf import global_settings
@@ -12,6 +10,10 @@ SETTINGS_ENV = "FASTAPI_SETTINGS"
 
 
 def init_settings(path: str):
+    """
+    we get doted path module, with extension .toml,
+    remove it, and load path to this module + set path to project base directory
+    """
     if path is not None:
         if path.endswith(".toml"):
             path = path.split(".toml")[0]

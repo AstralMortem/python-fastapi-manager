@@ -2,9 +2,6 @@ import inspect
 from types import ModuleType
 from pathlib import Path
 from importlib import import_module
-
-from starlette.routing import Router
-
 from fastapi_manager.utils.module_loading import import_string, module_has_submodule
 
 MODELS_MODULE_NAME = "models"

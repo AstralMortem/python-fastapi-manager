@@ -1,30 +1,34 @@
 from pathlib import Path
-
-from .base import BaseCommand
+import os
 from fastapi_manager.core.templates import Generator, get_project_folder, get_app_folder
-from fastapi_manager.conf import settings as settings_file
+from fastapi_manager.core.cli.typer import AsyncTyper
 
-class CreateProject(BaseCommand):
-    name = "startproject"
-
-    @classmethod
-    def execute(cls, project_name: str, project_path:str = None, settings: str = None):
-        project_structure = get_project_folder(project_name)
-        try:
-            Generator.generate_structure(project_structure.to_json(), project_path)
-        except Exception as e:
-            print(e)
+cli = AsyncTyper()
 
 
-class CreateApp(BaseCommand):
-    name = "startapp"
+@cli.command()
+def startproject(project_name: str, project_path: str = None, settings: str = None):
+    if settings is not None:
+        os.environ.setdefault("FASTAPI_SETTINGS", settings)
 
-    @classmethod
-    def execute(cls, app_name: str, project_path: str = None, settings: str = None):
-        app_structure = get_app_folder(app_name)
-        try:
-            if project_path is None:
-                project_path = Path(settings_file.BASE_DIR)
-            Generator.generate_structure(app_structure.to_json(), project_path, True)
-        except Exception as e:
-            print(e)
+    struct = get_project_folder(project_name)
+    try:
+        Generator.generate_structure(struct.to_json(), project_path)
+    except Exception as e:
+        print(f"[red]{e}[/red]")
+
+
+@cli.command()
+def startapp(app_name: str, project_path: str = None, settings: str = None):
+    from fastapi_manager.conf import settings as conf
+
+    if settings is not None:
+        os.environ.setdefault("FASTAPI_SETTINGS", settings)
+
+    struct = get_app_folder(app_name)
+    try:
+        if project_path is None:
+            project_path = Path(conf.BASE_DIR)
+        Generator.generate_structure(struct.to_json(), project_path, True)
+    except Exception as e:
+        print(f"[red]{e}[/red]")

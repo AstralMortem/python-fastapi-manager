@@ -1,25 +1,44 @@
-import asyncio
+from asyncio import iscoroutinefunction, run
+from collections import defaultdict
+from functools import wraps
+from typing import Callable
 import typer
-import inspect
-from .commands.base import BaseCommand
-from fastapi_manager import setup
 
 
-def get_all_command():
-    from fastapi_manager.core.cli import commands
+class AsyncTyper(typer.Typer):
+    event_handlers: defaultdict[str, list[Callable]] = defaultdict(list)
 
-    for name, obj in inspect.getmembers(commands, inspect.isclass):
-        if issubclass(obj, BaseCommand):
-            yield obj
+    def async_command(self, *args, **kwargs):
+        def decorator(async_func):
+            @wraps(async_func)
+            def sync_func(*_args, **_kwargs):
+                self.run_event_handlers("startup")
+                try:
+                    return run(async_func(*_args, **_kwargs))
+                except Exception as e:  # noqa
+                    raise e
+                finally:
+                    self.run_event_handlers("shutdown")
 
+            self.command(*args, **kwargs)(sync_func)
+            return async_func
 
-cli = typer.Typer()
+        return decorator
 
-for command in get_all_command():
-    current_command = command(command.name)
-    handler = typer.models.CommandInfo(
-        name=command.name, callback=current_command.execute
-    )
-    cli.registered_commands.append(handler)
-else:
-    asyncio.run(setup())
+    def add_event_handler(self, event_type: str, func: Callable) -> None:
+        self.event_handlers[event_type].append(func)
+
+    def run_event_handlers(self, event_type: str):
+        for event in self.event_handlers[event_type]:
+            if iscoroutinefunction(event):
+                run(event())
+            else:
+                event()
+
+    def __call__(self, *args, **kwargs):
+        self.run_event_handlers("startup")
+        super().__call__(*args, **kwargs)
+        self.run_event_handlers("shutdown")
+
+    def register_commands(self, instance: "AsyncTyper"):
+        self.registered_commands += instance.registered_commands

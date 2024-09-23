@@ -4,6 +4,9 @@ from fastapi_manager.utils.string import convert_to_camel_case
 
 
 def get_app_folder(app_name, **kwargs):
+    """
+    Project file/folder structure
+    """
     root = Folder(app_name)
     root.append(
         File("config.py", APP_CONFIG_CONTENT).set_replacer(
@@ -23,7 +26,9 @@ def get_app_folder(app_name, **kwargs):
 
 
 def get_project_folder(project_name, **kwargs):
-
+    """
+    App file/folder structure
+    """
     # Root Folder
     root = Folder(project_name)
 
